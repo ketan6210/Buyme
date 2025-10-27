@@ -1,4 +1,5 @@
 import functools
+import sqlite3
 
 from flask import (
   Blueprint,
@@ -82,6 +83,7 @@ def login():
     if error is None:
       # store the userID as a new session. for subsequent requests from this user, load their information
       session.clear()
+      print(user)
       session["user_id"] = user["id"]  # pyright: ignore[reportOptionalMemberAccess]
       return redirect(url_for("index"))
 
@@ -93,7 +95,7 @@ def login():
 # this function will be run before all view functions. It stores the user information in g.user which lasts for the entire request.
 @bp.before_app_request
 def load_logged_in_user():
-  user_id = session.get("user_id")
+  user_id = session.get("id")
 
   if user_id is None:
     g.user = None

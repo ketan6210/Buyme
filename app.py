@@ -38,6 +38,10 @@ def create_app(config_name="default"):
     # app.instance_path is the path to the Flask-created instance directory
   )
 
+  # Ensure instance folder exists
+  os.makedirs(app.instance_path, exist_ok=True)
+
+  # Initialize database
   db.init_app(app)
 
   # Register blueprints
@@ -56,6 +60,12 @@ def create_app(config_name="default"):
 
 
 if __name__ == "__main__":
-  db.init_db()
   app = create_app()
+
+  # Initialize database on first run
+  with app.app_context():
+    if not os.path.exists(app.config["DATABASE"]):
+      print("Initializing database...")
+      db.init_db()
+
   app.run(debug=True)
