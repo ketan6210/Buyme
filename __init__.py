@@ -44,7 +44,7 @@ def create_app(config_name="default"):
   register_blueprints(app)
 
   # Import models to register them
-  # import_all_models("models")
+  import_all_models("models")
 
   # @app.route("/hello")
   # def index():
@@ -56,6 +56,5 @@ def create_app(config_name="default"):
 
 
 if __name__ == "__main__":
-  db.init_db()
   app = create_app()
   app.run(debug=True)

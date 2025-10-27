@@ -11,8 +11,8 @@ from flask import (
 from werkzeug.exceptions import abort
 
 from .auth import login_required
-from extensions import db
-from models.user import User
+import db
+# from models.user import User
 
 bp = Blueprint(
   "home",

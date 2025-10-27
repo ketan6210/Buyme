@@ -11,9 +11,8 @@ from flask import (
   url_for,
 )
 from werkzeug.security import check_password_hash, generate_password_hash
-
-from extensions import db
-from models.user import User
+from db import get_db
+# from models.user import User
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -21,12 +20,14 @@ bp = Blueprint("auth", __name__, url_prefix="/auth")
 # store authentication related views here, as part of the /auth blueprint
 @bp.route("/register", methods=("GET", "POST"))
 def register():
+  # TODO: register different types
   if request.method == "POST":
     f_name = request.form["f_name"]
     l_name = request.form["l_name"]
     username = request.form["username"]
     password = request.form["password"]
-    # TODO: need first name, last name
+
+    db = get_db()
     error = None
 
     if not username:
@@ -38,19 +39,22 @@ def register():
     elif not l_name:
       error = "Last Name is required."
 
+    user = db.execute("SELECT * FROM user WHERE username = ?", (username,)).fetchone()
+
     if error is None:
       try:
-        new_user = User(
-          username=username,
-          password=generate_password_hash(password),
-          user_type="customer",
-          f_name=f_name,
-          l_name=l_name,
+        db.execute(
+          "INSERT INTO user (username, password, f_name, l_name, user_type) VALUES (?, ?, ?, ?, ?)",
+          (
+            username,
+            generate_password_hash(password),
+            f_name,
+            l_name,
+            "customer",
+          ),
         )
-        db.session.add(new_user)
-        db.session.commit()
-      except Exception as e:
-        db.session.rollback()
+        db.commit()
+      except db.IntegrityError:
         error = f"User {username} is already registered."
       else:
         return redirect(url_for("auth.login"))
@@ -66,19 +70,19 @@ def login():
   if request.method == "POST":
     username = request.form["username"]
     password = request.form["password"]
-    # db = get_db()
+    db = get_db()
     error = None
-    user = User.query.filter_by(username=username).first()
+    user = db.execute("SELECT * FROM user WHERE username = ?", (username,)).fetchone()
 
     if user is None:
       error = "Incorrect username."
-    elif not check_password_hash(user.password, password):
+    elif not check_password_hash(user["password"], password):
       error = "Incorrect password."
 
     if error is None:
       # store the userID as a new session. for subsequent requests from this user, load their information
       session.clear()
-      session["user_id"] = user.user_id  # pyright: ignore[reportOptionalMemberAccess]
+      session["user_id"] = user["id"]  # pyright: ignore[reportOptionalMemberAccess]
       return redirect(url_for("index"))
 
     flash(error)
@@ -94,7 +98,7 @@ def load_logged_in_user():
   if user_id is None:
     g.user = None
   else:
-    g.user = User.query.filter_by(user_id=user_id).first()
+    g.user = get_db().execute("SELECT * FROM user WHERE id = ?", (user_id,)).fetchone()
 
 
 # clear the session, so that load_logged_in_user won't load the user for subsequent requests
