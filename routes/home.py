@@ -62,8 +62,8 @@ def profile():
     """,
     (user_id, user_id),
   ).fetchall()
-  for value in participating_auctions[0]:
-    print(value)
+  # for value in participating_auctions[0]:
+  #   print(value)
 
   # Get won auctions
   won_auctions = db.execute(

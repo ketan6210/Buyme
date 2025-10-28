@@ -18,6 +18,10 @@ def register_blueprints(app):
 
   app.register_blueprint(home_bp)
 
+  from routes.search import bp as search_bp
+
+  app.register_blueprint(search_bp)
+
   # Register other blueprints as you create them
   # from routes.auctions import bp as auctions_bp
   # app.register_blueprint(auctions_bp)
