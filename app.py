@@ -8,13 +8,6 @@ import pkgutil
 import sys
 
 
-def import_all_models(package_name):
-  package = importlib.import_module(package_name)
-  for loader, module_name, is_pkg in pkgutil.iter_modules(package.__path__):
-    full_module_name = f"{package_name}.{module_name}"
-    importlib.import_module(full_module_name)
-
-
 def register_blueprints(app):
   """Register all blueprints"""
   from routes.auth import bp as auth_bp
@@ -46,9 +39,6 @@ def create_app(config_name="default"):
 
   # Register blueprints
   register_blueprints(app)
-
-  # Import models to register them
-  # import_all_models("models")
 
   # @app.route("/hello")
   # def index():

@@ -84,7 +84,7 @@ def login():
       # store the userID as a new session. for subsequent requests from this user, load their information
       session.clear()
       print(user)
-      session["user_id"] = user["id"]  # pyright: ignore[reportOptionalMemberAccess]
+      session["id"] = user["id"]  # pyright: ignore[reportOptionalMemberAccess]
       return redirect(url_for("index"))
 
     flash(error)

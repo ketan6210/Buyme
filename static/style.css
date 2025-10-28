@@ -25,21 +25,37 @@ nav {
   display: flex;
   align-items: center;
   padding: 0 0.5rem;
+  justify-content: space-between; /* This will push elements apart */
 }
+
 nav h1 {
-  flex: auto;
   margin: 0;
+  /* Remove flex: auto to prevent it from taking all space */
 }
+
 nav h1 a {
   text-decoration: none;
   padding: 0.25rem 0.5rem;
 }
-nav ul {
+
+/* Style the first ul (left side) */
+nav ul:first-of-type {
   display: flex;
   list-style: none;
   margin: 0;
   padding: 0;
+  margin-left: 1rem; /* Add some space between h1 and first ul */
 }
+
+/* Style the second ul (right side) */
+nav ul:last-of-type {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-left: auto; /* This pushes it to the right */
+}
+
 nav ul li a,
 nav ul li span,
 header .action {
@@ -121,4 +137,173 @@ input[type="submit"] {
   color: buttontext;
   background-color: buttonface;
   text-decoration: none; */
+}
+
+/* Profile-specific styles */
+.profile-section {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #f9f9f9;
+}
+
+.profile-section h2 {
+  color: #377ba8;
+  margin-top: 0;
+  border-bottom: 2px solid #377ba8;
+  padding-bottom: 0.5rem;
+}
+
+.user-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.info-item {
+  padding: 0.5rem;
+  background: white;
+  border-radius: 4px;
+  border-left: 3px solid #377ba8;
+}
+
+.auctions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.auction-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.auction-card h3 {
+  color: #377ba8;
+  margin-top: 0;
+}
+
+.auction-description {
+  color: #666;
+  font-style: italic;
+  margin: 0.5rem 0;
+}
+
+.auction-details {
+  margin: 1rem 0;
+}
+
+.detail-item {
+  margin: 0.25rem 0;
+  font-size: 0.9em;
+}
+
+.auction-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.action-btn {
+  background: #377ba8;
+  color: white;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.9em;
+  transition: background 0.2s;
+}
+
+.action-btn:hover {
+  background: #2c5f8a;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.stat-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.stat-card h3 {
+  font-size: 2em;
+  color: #377ba8;
+  margin: 0;
+}
+
+.stat-card p {
+  margin: 0.5rem 0 0 0;
+  color: #666;
+}
+
+.no-data {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 2rem;
+}
+
+.login-prompt {
+  text-align: center;
+  padding: 2rem;
+}
+
+.login-prompt h2 {
+  color: #377ba8;
+}
+
+/* Status indicators */
+.status-active {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.status-ended {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.status-upcoming {
+  color: #ffc107;
+  font-weight: bold;
+}
+
+.bid-status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.bid-leading {
+  background: #d4edda;
+  color: #155724;
+}
+
+.bid-outbid {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.bid-won {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.bid-lost {
+  background: #f8d7da;
+  color: #721c24;
 }

@@ -42,3 +42,4 @@
 - Uses SQLite, so no external MySQL setup is needed. `buyme_database.sql` is kept for reference.
 - The app initializes the database on first run, including all models.
 - `instance/buyme.sqlite3` is not committed, so each collaborator starts with a fresh database.
+- uv reference https://docs.astral.sh/uv/reference/cli/

@@ -53,3 +53,4 @@ def init_app(app):
 
 
 sqlite3.register_converter("timestamp", lambda v: datetime.fromisoformat(v.decode()))
+sqlite3.register_converter("datetime", lambda v: datetime.fromisoformat(v.decode()))
