@@ -2,7 +2,7 @@
 {% block title %}User Profile{% endblock %}
 {% block header %}
   <h1>User Profile</h1>
-  {% if g.user %}<a class="action" href="{{ url_for("home.profile") }}">Refresh</a>{% endif %}
+  {% if g.user %}<a class="action" href="{{ url_for('home.profile') }}">Refresh</a>{% endif %}
 {% endblock %}
 {% block content %}
   {% if g.user %}
@@ -15,7 +15,8 @@
         </div>
         <div class="info-item">
           <strong>First Name:</strong> {{ g.user['f_name'] }}
-          <strong>Last Name:</strong> {{ g.user['f_name'] }}
+          <br>
+          <strong>Last Name:</strong> {{ g.user['l_name'] }}
         </div>
         <div class="info-item">
           <strong>User Type:</strong> {{ g.user['user_type'].title() }}
@@ -32,8 +33,12 @@
         <div class="auctions-grid">
           {% for auction in selling_auctions %}
             <div class="auction-card">
-              <h3>{{ auction['item_name'] }}</h3>
-              <p class="auction-description">{{ auction['item_desc'] }}</p>
+              <h3 class="auction-title">{{ auction['auction_title'] }}</h3>
+              <p class="auction-description-main">{{ auction['auction_desc'] }}</p>
+              <div class="item-info">
+                <h4 class="item-name">Item: {{ auction['item_name'] }}</h4>
+                <p class="item-description">{{ auction['item_desc'] }}</p>
+              </div>
               <div class="auction-details">
                 <div class="detail-item">
                   <strong>Starting Price:</strong> ${{ "%.2f"|format(auction['starting_price']) }}
@@ -84,8 +89,12 @@
         <div class="auctions-grid">
           {% for auction in participating_auctions %}
             <div class="auction-card">
-              <h3>{{ auction['item_name'] }}</h3>
-              <p class="auction-description">{{ auction['item_desc'] }}</p>
+              <h3 class="auction-title">{{ auction['auction_title'] }}</h3>
+              <p class="auction-description-main">{{ auction['auction_desc'] }}</p>
+              <div class="item-info">
+                <h4 class="item-name">Item: {{ auction['item_name'] }}</h4>
+                <p class="item-description">{{ auction['item_desc'] }}</p>
+              </div>
               <div class="auction-details">
                 <div class="detail-item">
                   <strong>Your Highest Bid:</strong> ${{ "%.2f"|format(auction['your_highest_bid']) }}
@@ -153,8 +162,8 @@
     <div class="login-prompt">
       <h2>Please Log In</h2>
       <p>You need to be logged in to view your profile.</p>
-      <a href="{{ url_for("auth.login") }}" class="action-btn">Log In</a>
-      <a href="{{ url_for("auth.register") }}" class="action-btn">Register</a>
+      <a href="{{ url_for('auth.login') }}" class="action-btn">Log In</a>
+      <a href="{{ url_for('auth.register') }}" class="action-btn">Register</a>
     </div>
   {% endif %}
 {% endblock %}

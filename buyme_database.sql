@@ -15,34 +15,101 @@ CREATE TABLE user (
     l_name VARCHAR(50),
     user_type VARCHAR(20) NOT NULL CHECK(user_type IN ('customer', 'representative', 'admin'))
 );
+-- insert sample user
+INSERT INTO user (username, password, f_name, l_name, user_type) VALUES 
+('admin', 'admin', 'Admin', 'Admin', 'admin');
+INSERT INTO user (username, password, f_name, l_name, user_type) VALUES 
+('customer', 'customer', 'Customer', 'Customer', 'customer');
+INSERT INTO user (username, password, f_name, l_name, user_type) VALUES 
+('representative', 'representative', 'Representative', 'Representative', 'representative');
 
 -- Category table
 CREATE TABLE category (
     category_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    category_name VARCHAR(50) NOT NULL,
-    parent_id INTEGER DEFAULT NULL,
-    FOREIGN KEY (parent_id) REFERENCES category(category_id)
+    category_name VARCHAR(100) NOT NULL
 );
-
-INSERT INTO category (category_name, parent_id) VALUES 
-('Electronics', NULL),
-('Laptops', 1),
-('Gaming Laptops', 2),
-('Phones', 1),
-('Cameras', 1);
+INSERT INTO category (category_name) VALUES 
+('Electronics'),
+('Laptops'),
+('Gaming Laptops'),
+('Phones'),
+('Cameras');
 
 -- Item table
 CREATE TABLE item (
     item_id INTEGER PRIMARY KEY AUTOINCREMENT,
     item_name VARCHAR(255) NOT NULL,
     item_desc TEXT,
-    category_id INTEGER,
+    category_id INTEGER NOT NULL,
     FOREIGN KEY (category_id) REFERENCES category(category_id)
 );
+
+-- Add sample items
+INSERT INTO item (item_name, item_desc, category_id) VALUES 
+('MacBook Air M4', "random description macbook", 2);
+
+INSERT INTO item (item_name, item_desc, category_id)
+VALUES ('iPhone 16', "random description iphone16", 4);
+
+
+
+-- Category-specific detail types (defines what details exist for each category)
+-- Laptop : CPU, Memory, Disk (would contain 3 rows in category_details)
+-- Phone: Brand, model
+CREATE TABLE category_detail_type (
+    detail_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    category_id INTEGER NOT NULL,
+    detail_name VARCHAR(100) NOT NULL,
+    FOREIGN KEY (category_id) REFERENCES category(category_id)
+);
+
+-- insert sample category details for Laptops
+-- For category 'Laptop', define what details it has
+INSERT INTO category_detail_type (category_id, detail_name)
+VALUES 
+(2, 'CPU'),
+(2, 'Memory'),
+(2, 'Disk');
+
+-- for category 'Phones' define detail types
+INSERT INTO category_detail_type (category_id, detail_name)
+VALUES
+(4, 'Display'),
+(4, 'Battery'),
+(4, 'Camera'),
+(4, 'Storage');
+
+-- Actual item details (stores values for each item/detail pair)
+CREATE TABLE item_detail (
+    item_detail_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    item_id INTEGER NOT NULL,
+    detail_type_id INTEGER NOT NULL,
+    detail_value VARCHAR(255),
+    FOREIGN KEY (item_id) REFERENCES item(item_id),
+    FOREIGN KEY (detail_type_id) REFERENCES category_detail_type(detail_type_id)
+);
+
+-- Add sample item (macbook) details (cpu, memory, disk)
+INSERT INTO item_detail (item_id, detail_type_id, detail_value)
+VALUES
+(1, 1, 'Apple M4 Chip'),  -- CPU
+(1, 2, '16GB'),           -- Memory
+(1, 3, '512GB SSD');      -- Disk
+
+-- add iphone 16 specific details
+INSERT INTO item_detail (item_id, detail_type_id, detail_value)
+VALUES
+(2, 4, '6.3-inch OLED 120Hz'),
+(2, 5, '4350 mAh'),
+(2, 6, '48MP Dual Camera'),
+(2, 7, '256GB');
+
 
 -- Auctions table
 CREATE TABLE auctions (
     auction_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    auction_title VARCHAR(255) NOT NULL DEFAULT "",
+    auction_desc TEXT NOT NULL DEFAULT "",
     item_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     starting_price DECIMAL(12,2) NOT NULL,
@@ -52,6 +119,12 @@ CREATE TABLE auctions (
     FOREIGN KEY (item_id) REFERENCES item(item_id),
     FOREIGN KEY (user_id) REFERENCES user(id)
 );
+
+-- insert sample auction
+INSERT INTO auctions (item_id, auction_title, auction_desc, user_id, starting_price, auction_start, auction_end) VALUES 
+(1, 'Selling mint condition MacBook Air M4!!', 'This MacBook Air M4 is in mint condition, with no scratches or dents. It has a beautiful display and a fast processor.', 1, 1000.00, '2025-10-01 10:00:00', '2025-11-01 11:00:00');
+INSERT INTO auctions (item_id, auction_title, auction_desc, user_id, starting_price, auction_start, auction_end) VALUES 
+(2, 'Selling mint condition iPhone 16!!', 'This iPhone 16 is in mint condition, with no scratches or dents. It has a beautiful display and a fast processor.', 2, 1000.00, '2025-11-01 10:00:00', '2025-12-01 11:00:00');
 
 -- Bid table
 CREATE TABLE bid (

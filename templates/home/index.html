@@ -3,7 +3,12 @@
   <h1>
     {% block title %}Home{% endblock %}
   </h1>
-  {% if g.user %}<a class="action">New</a>{% endif %}
+  {% if g.user %}
+    <a href="{{ url_for("home.create_auction") }}">
+      <button class="fancy-btn new-auction-btn">New Auction</button>
+    </a>
+  {% endif %}
+  <!-- {{ url_for("home.create_auction") }}" -->
 {% endblock %}
 {% block content %}
   <!--
@@ -23,7 +28,7 @@
       <option value="auction">Auctions</option>
       <option value="user">Users</option>
     </select>
-    <button type="submit" class="search-button">Search</button>
+    <button type="submit" class="fancy-btn">Search</button>
   </form>
   <div class="auctions-container">
     <!-- Future auction listings will go here -->

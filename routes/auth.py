@@ -48,12 +48,13 @@ def register():
           "INSERT INTO user (username, password, f_name, l_name, user_type) VALUES (?, ?, ?, ?, ?)",
           (
             username,
-            generate_password_hash(password),
+            password,
             f_name,
             l_name,
             "customer",
           ),
         )
+        # TODO: pass `generate_password_hash(password)` for password to hash it
         db.commit()
       except db.IntegrityError:
         error = f"User {username} is already registered."
@@ -77,8 +78,10 @@ def login():
 
     if user is None:
       error = "Incorrect username."
-    elif not check_password_hash(user["password"], password):
+    elif not user["password"] == password:
       error = "Incorrect password."
+
+    # TODO: check with check_password_hash(user["password"], password) if hashing during registration
 
     if error is None:
       # store the userID as a new session. for subsequent requests from this user, load their information

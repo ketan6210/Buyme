@@ -32,6 +32,7 @@ def init_db():
   schema_path = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "buyme_database.sql"
   )
+  print(schema_path)
 
   with open(schema_path, "r") as f:
     db.executescript(f.read())
