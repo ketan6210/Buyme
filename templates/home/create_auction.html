@@ -79,15 +79,15 @@
     <script>
       const select = document.getElementById("item_category");
       const item_details_div = document.getElementById("item_details");
-      const category_ids_and_details = {{ category_ids_and_details | tojson }};
-        {# dictionary that links category_id : [detail_name and detail_id] #}
+      const category_ids_and_details = {{ category_ids_and_details | tojson }}; 
+        //{# dictionary that links category_id : [detail_name and detail_id] #}
       //TODO: update innerHTML with the correct details based on category
       //TODO: search view, search button not styling???
       
       select.addEventListener('change', () => {
         const category = select.value;
         item_details_div.innerHTML = "" //clear all details
-        {# console.log(category); #}
+        //{# console.log(category); #}
         //TODO: for each category, update the HTML to have the details
           // need to get the details from the database somehow
             // maybe can pull from JS? or need to pass to template from API?
@@ -103,9 +103,9 @@
     <button type="submit" class="fancy-btn">Create Auction</button>
   </form>
   <script>
-    {# get auction times. if start > end: clear the inputs #}
+    // {# get auction times. if start > end: clear the inputs #}
     document.getElementById('new_auction_form').addEventListener('submit', function(event) {
-      {# validate dates #}
+      //{# validate dates #}
       const auction_start = document.getElementById('auction_start');
       const auction_end = document.getElementById('auction_end');
       const startDate = new Date(auction_start.value);

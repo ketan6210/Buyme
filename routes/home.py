@@ -112,56 +112,10 @@ def profile():
 def create_auction():
   # if get request, then just load the template
   # get categorires
-  if request.method == "GET":
-    db = get_db()
-    user_id = g.user["id"]
-    # want 2 hash tables:
-    # { category_name: id}
-    # { category_id: {detail_name: detail_id} }
-
-    # get categories
-    category_names_and_id = db.execute(
-      """
-      SELECT category_name, category_id 
-      FROM category c
-      """
-    ).fetchall()
-    # turn into a dictionary {cat_name: id}
-
-    category_ids_and_details = {}  # { category_id: {detail_name: detail_id} }
-    # for each category, get all details
-    # join category with category_details
-    for cat_id in [row["category_id"] for row in category_names_and_id]:
-      details_rows = db.execute(
-        """
-        SELECT detail_name, detail_type_id
-        FROM category_detail_type cd
-        WHERE cd.category_id = ?
-        """,
-        (cat_id,),
-      ).fetchall()
-
-      category_ids_and_details[cat_id] = [
-        (row["detail_name"], row["detail_type_id"]) for row in details_rows
-      ]
-
-    # turn into a dictionary {cat_name: id}
-    category_names_and_id = {
-      cat_name: cat_id for cat_name, cat_id in category_names_and_id
-    }
-
-    # print(categories[1]["category_name"])
-    print(category_ids_and_details)
-
-    return render_template(
-      "home/create_auction.html",
-      category_ids_and_details=category_ids_and_details,
-      category_names_and_id=category_names_and_id,
-    )  # { category: [details] }
-  elif request.method == "POST":
+  if request.method == "POST":
     # if post request, then get inputted information, and create a auction. redirect to auction view
     print(request.form)
-    error = "good"
+    message = "New Auction Created!"
     # get information
     auction_title = request.form["auction_title"]
     auction_desc = request.form["auction_desc"]
@@ -238,9 +192,56 @@ def create_auction():
       )
       db.commit()
 
-    except db.Error:
-      error = "database error"
+    except db.Error as e:
+      message = f"Database error: {e}"
+    message = "New Auction Created!"
 
-    flash(error)
+    flash(message)
     return redirect(url_for("index"))
-    pass
+
+  # else get request:
+  db = get_db()
+  user_id = g.user["id"]
+  # want 2 hash tables:
+  # { category_name: id}
+  # { category_id: {detail_name: detail_id} }
+
+  # get categories
+  category_names_and_id = db.execute(
+    """
+    SELECT category_name, category_id 
+    FROM category c
+    """
+  ).fetchall()
+  # turn into a dictionary {cat_name: id}
+
+  category_ids_and_details = {}  # { category_id: {detail_name: detail_id} }
+  # for each category, get all details
+  # join category with category_details
+  for cat_id in [row["category_id"] for row in category_names_and_id]:
+    details_rows = db.execute(
+      """
+      SELECT detail_name, detail_type_id
+      FROM category_detail_type cd
+      WHERE cd.category_id = ?
+      """,
+      (cat_id,),
+    ).fetchall()
+
+    category_ids_and_details[cat_id] = [
+      (row["detail_name"], row["detail_type_id"]) for row in details_rows
+    ]
+
+  # turn into a dictionary {cat_name: id}
+  category_names_and_id = {
+    cat_name: cat_id for cat_name, cat_id in category_names_and_id
+  }
+
+  # print(categories[1]["category_name"])
+  print(category_ids_and_details)
+
+  return render_template(
+    "home/create_auction.html",
+    category_ids_and_details=category_ids_and_details,
+    category_names_and_id=category_names_and_id,
+  )  # { category: [details] }

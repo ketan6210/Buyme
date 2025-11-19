@@ -54,8 +54,8 @@ VALUES ('iPhone 16', "random description iphone16", 4);
 
 
 -- Category-specific detail types (defines what details exist for each category)
--- Laptop : CPU, Memory, Disk (would contain 3 rows in category_details)
--- Phone: Brand, model
+-- Laptop : CPU, Memory, Disk (would contain 3 rows in category_detail_type)
+-- Phone: Display, Battery, Camera, Storage
 CREATE TABLE category_detail_type (
     detail_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
     category_id INTEGER NOT NULL,
@@ -115,12 +115,12 @@ CREATE TABLE auctions (
     starting_price DECIMAL(12,2) NOT NULL,
     auction_start DATETIME NOT NULL,
     auction_end DATETIME NOT NULL,
-    current_highest_bid DECIMAL(12,2) DEFAULT NULL,
+    current_highest_bid DECIMAL(12,2) DEFAULT 0,
     FOREIGN KEY (item_id) REFERENCES item(item_id),
     FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
--- insert sample auction
+-- insert sample auction (sold by admin and customer)
 INSERT INTO auctions (item_id, auction_title, auction_desc, user_id, starting_price, auction_start, auction_end) VALUES 
 (1, 'Selling mint condition MacBook Air M4!!', 'This MacBook Air M4 is in mint condition, with no scratches or dents. It has a beautiful display and a fast processor.', 1, 1000.00, '2025-10-01 10:00:00', '2025-11-01 11:00:00');
 INSERT INTO auctions (item_id, auction_title, auction_desc, user_id, starting_price, auction_start, auction_end) VALUES 

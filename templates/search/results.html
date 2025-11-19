@@ -6,7 +6,7 @@
 {% endblock %}
 {% block content %}
   <!-- Search form (same as index) -->
-  <form action="{{ url_for("search.search") }}"
+  <form action="{{ url_for('search.search') }}"
         method="get"
         class="search-form">
     <input type="text"
@@ -19,7 +19,7 @@
       <option value="auction" {% if search_type == 'auction' %}selected{% endif %}>Auctions</option>
       <option value="user" {% if search_type == 'user' %}selected{% endif %}>Users</option>
     </select>
-    <button type="submit" class="search-button">Search</button>
+    <button type="submit" class="fancy-btn">Search</button>
   </form>
   <!-- results container -->
   <div class="results-container">
@@ -44,7 +44,7 @@
                     <strong>Starting Price:</strong> ${{ "%.2f"|format(result['starting_price']) }}
                   </p>
                   <p class="detail-item">
-                    <strong>Current Bid:</strong> ${{ "%.2f"|format(result['current_highest_bid'] or result['starting_price']) }}
+                    <strong>Current Highest Bid:</strong> ${{ "%.2f"|format(result['current_highest_bid']) }}
                   </p>
                   <p class="detail-item">
                     <strong>Start:</strong> {{ result['auction_start'] }}
